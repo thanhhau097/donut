@@ -14,6 +14,7 @@ import zss
 from datasets import load_dataset
 from nltk import edit_distance
 from torch.utils.data import Dataset
+from tqdm import tqdm
 from transformers.modeling_utils import PreTrainedModel
 from zss import Node
 
@@ -65,8 +66,10 @@ class DonutDataset(Dataset):
         self.dataset_length = len(self.dataset)
 
         self.gt_token_sequences = []
-        for sample in self.dataset:
-            ground_truth = json.loads(sample["ground_truth"])
+
+        for sample in tqdm(self.dataset):
+            # ground_truth = json.loads(sample["ground_truth"])
+            ground_truth = sample["ground_truth"]
             if "gt_parses" in ground_truth:  # when multiple ground truths are available, e.g., docvqa
                 assert isinstance(ground_truth["gt_parses"], list)
                 gt_jsons = ground_truth["gt_parses"]
